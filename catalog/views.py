@@ -5,10 +5,12 @@ def home_controller(request):
     return render(request, 'catalog/index.html')
 
 
-def contactcontroller(request):
+def contact_controller(request):
     if request.method == 'POST':
-        firstName = request.POST.get('firstName')
-        lastName = request.POST.get('lastName')
+        firstname = request.POST.get('first_name')
+        lastname = request.POST.get('last_name')
         email = request.POST.get('email')
-        print(f'{firstName} {lastName} {email}')
-    return render(request, 'catalog/index1.html')
+        print(f"{firstname} {lastname} {email}")
+    return render(request, 'catalog/contacts.html')
+
+
