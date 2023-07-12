@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 
 def home_controller(request):
@@ -11,6 +11,9 @@ def contact_controller(request):
         lastname = request.POST.get('last_name')
         email = request.POST.get('email')
         print(f"{firstname} {lastname} {email}")
+
+        return render(request, 'catalog/success.html')
+
     return render(request, 'catalog/contacts.html')
 
 

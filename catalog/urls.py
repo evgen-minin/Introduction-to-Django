@@ -5,5 +5,5 @@ from catalog import views
 urlpatterns = [
 
     path('', views.home_controller),
-    path('contacts/', views.contact_controller),
+    path('contacts/', views.contact_controller, name='contacts'),
 ]
