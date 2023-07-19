@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from catalog.forms import ProductForm
 from catalog.models import Product
 
 
@@ -25,3 +26,15 @@ def card_product(request):
         'object_list': product_list
     }
     return render(request, 'catalog/card_product.html', context)
+
+
+def create_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('catalog')
+    else:
+        form = ProductForm()
+
+    return render(request, 'catalog/create_product.html', {'form': form})
