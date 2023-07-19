@@ -24,7 +24,7 @@ class Product(models.Model):
     last_modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.description
 
     class Meta:
         verbose_name_plural = 'Продукты'

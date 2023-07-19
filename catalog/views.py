@@ -4,11 +4,7 @@ from catalog.models import Product
 
 
 def home_controller(request):
-    latest_products = Product.objects.order_by('-created_date')[:5]
-    for product in latest_products:
-        print(product.name)
-
-    return render(request, 'catalog/index.html')
+    return render(request, 'catalog/home.html')
 
 
 def contact_controller(request):
@@ -21,3 +17,11 @@ def contact_controller(request):
         return render(request, 'catalog/success.html')
 
     return render(request, 'catalog/contacts.html')
+
+
+def card_product(request):
+    product_list = Product.objects.all()
+    context = {
+        'object_list': product_list
+    }
+    return render(request, 'catalog/card_product.html', context)
