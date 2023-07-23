@@ -20,7 +20,8 @@
                     {% for object in object_list %}
                         <div class="col-md-6 mb-4">
                             <div class="card">
-                                <img src="{% mediapath object.image %}">
+                                <img src="{% media_path object.image %}" alt="Product Image">
+
                                 <div class="card-body">
                                     <h5 class="card-title">{{ object.name }}</h5>
                                     <p class="card-text">{{ object.description | slice:":50" }}</p>
