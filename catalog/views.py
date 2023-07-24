@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
 
 from catalog.forms import ProductForm
 from catalog.models import Product
@@ -20,21 +22,12 @@ def contact_controller(request):
     return render(request, 'catalog/contacts.html')
 
 
-def card_product(request):
-    product_list = Product.objects.all()
-    context = {
-        'object_list': product_list
-    }
-    return render(request, 'catalog/card_product.html', context)
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/card_product.html'
 
 
-def create_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog')
-    else:
-        form = ProductForm()
-
-    return render(request, 'catalog/create_product.html', {'form': form})
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('catalog:card_product')
