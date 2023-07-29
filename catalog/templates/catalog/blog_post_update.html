@@ -1,0 +1,11 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+    <h2>Редактирование статьи</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+    <a href="{% url 'blog_post_detail' blog_post.slug %}" class="btn btn-secondary">Отмена</a>
+{% endblock content %}

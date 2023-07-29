@@ -1,0 +1,15 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+    <h2>{{ blog_post.title }}</h2>
+    <p><strong>Дата создания:</strong> {{ blog_post.created_at }}</p>
+    <p><strong>Количество просмотров:</strong> {{ blog_post.views }}</p>
+    <p><strong>Содержимое:</strong></p>
+    <p>{{ blog_post.content }}</p>
+    {% if blog_post.is_published %}
+        <p><strong>Статья опубликована</strong></p>
+    {% else %}
+        <p><strong>Статья не опубликована</strong></p>
+    {% endif %}
+    <a href="{% url 'blog_post_list' %}" class="btn btn-secondary">Назад к списку</a>
+{% endblock content %}
