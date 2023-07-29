@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
@@ -81,9 +83,17 @@ class BlogPostDetailView(DetailView):
     template_name = 'catalog/blog_post_detail.html'
     context_object_name = 'blog_post'
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.views += 1
-        self.object.save()
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.views += 1
+        obj.save()
+
+        if obj.views == 100:
+            subject = 'Поздравляем! Ваша статья набрала 100 просмотров'
+            message = f'Ваша статья "{obj.title}" набрала 100 просмотров. Продолжайте в том же духе!'
+            from_email = ''
+            to_email = ['mininevgen2906@yandex.ru']
+            send_mail(subject, message, from_email, to_email)
+
+        return obj
+
