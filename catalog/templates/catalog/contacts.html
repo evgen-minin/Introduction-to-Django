@@ -1,5 +1,5 @@
 {% extends "catalog/base.html" %}
-
+{% load crispy_forms_tags %}
 {% block title %}Форма - {{ block.super }}{% endblock title %}
 
 {% block header %}
@@ -12,6 +12,7 @@
             <div class="col-md-6 offset-md-3">
                 <form method="post">
                     {% csrf_token %}
+                    {{ form|crispy }}
                     <div class="mb-3">
                         <label for="first_name" class="form-label">Имя:</label>
                         <input type="text" class="form-control" id="first_name" name="first_name" required>

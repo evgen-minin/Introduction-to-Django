@@ -1,12 +1,12 @@
-from django.conf import settings
 from django.core.mail import send_mail
+from django.forms import modelformset_factory, formset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 
-from catalog.forms import ProductForm, BlogPostForm
-from catalog.models import Product, BlogPost
+from catalog.forms import ProductForm, BlogPostForm, VersionForm
+from catalog.models import Product, BlogPost, Version
 
 
 def home_controller(request):
@@ -29,11 +29,49 @@ def contact_controller(request):
 class ProductListView(ListView):
     model = Product
     template_name = 'catalog/card_product.html'
+    context_object_name = 'object_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_id'] = self.kwargs.get('product_id', None)
+        return context
+
+
+class VersionCreateView(CreateView):
+    model = Version
+    form_class = VersionForm
+    template_name = 'catalog/version_form.html'
+    success_url = reverse_lazy('catalog')
+
+    def form_valid(self, form):
+        form.instance.product = Product.objects.get(pk=self.kwargs['product_id'])
+        form.instance.is_current_version = True
+
+        active_version = form.instance.product.versions.filter(is_current_version=True).first()
+        if active_version:
+            active_version.is_current_version = False
+            active_version.save()
+
+        return super().form_valid(form)
 
 
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
+    success_url = reverse_lazy('catalog')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_update.html'
+    pk_url_kwarg = 'pk'
+    success_url = reverse_lazy('catalog')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'catalog/product_delete.html'
     success_url = reverse_lazy('catalog')
 
 
@@ -96,4 +134,3 @@ class BlogPostDetailView(DetailView):
             send_mail(subject, message, from_email, to_email)
 
         return obj
-

@@ -1,11 +1,13 @@
 {% extends "catalog/base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-    <h2>Редактирование статьи</h2>
+    <h2>Редактирование продукта</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
+
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
-    <a href="{% url 'blog_post_detail' blog_post.slug %}" class="btn btn-secondary">Отмена</a>
+    <a href="{% url 'product_update' pk=product.pk %}" class="btn btn-secondary">Отмена</a>
 {% endblock content %}
