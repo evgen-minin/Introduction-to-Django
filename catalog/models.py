@@ -1,5 +1,5 @@
+from django.core.validators import MinValueValidator
 from django.db import models
-from django.urls import reverse
 from django.utils.text import slugify
 
 NULLABLE = {'blank': True, 'null': True}
@@ -31,6 +31,10 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = 'Продукты'
 
+    @property
+    def active_version(self):
+        return self.versions.filter(is_current_version=True).first()
+
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
@@ -48,3 +52,13 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='versions')
+    version_number = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    version_name = models.CharField(max_length=100)
+    is_current_version = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.product} - Version {self.version_number}"
