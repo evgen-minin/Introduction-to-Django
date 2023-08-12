@@ -1,13 +1,13 @@
 from django.core.mail import send_mail
-from django.forms import modelformset_factory, formset_factory
+
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.utils.text import slugify
+
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 
 from catalog.forms import ProductForm, BlogPostForm, VersionForm
 from catalog.models import Product, BlogPost, Version
-
+from django.contrib.auth.decorators import login_required
 
 def home_controller(request):
     latest_blog_posts = BlogPost.objects.order_by('-created_at')[:3]
@@ -21,7 +21,7 @@ def contact_controller(request):
         email = request.POST.get('email')
         print(f"{firstname} {lastname} {email}")
 
-        return render(request, 'catalog/success.html')
+        return render(request, 'catalog/sucsess.html')
 
     return render(request, 'catalog/contacts.html')
 
@@ -59,7 +59,16 @@ class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog')
-
+    
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        
+        return super().form_valid(form)
+        
+    def test_func(self):
+        return self.request.user.is_authenticated
 
 class ProductUpdateView(UpdateView):
     model = Product
@@ -91,7 +100,7 @@ class BlogPostCreateView(CreateView):
     success_url = reverse_lazy('blog_post_list')
 
     def form_valid(self, form):
-        form.instance.slug = slugify(form.instance.title)
+        form.instance.slug = form.instance.title
         return super().form_valid(form)
 
 

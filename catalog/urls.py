@@ -6,7 +6,6 @@ from catalog.views import home_controller, contact_controller, ProductListView, 
 
 urlpatterns = [
     path('', home_controller, name='home'),
-    path('contacts/', contact_controller, name='contacts'),
     path('catalog/', ProductListView.as_view(), name='catalog'),
     path('create/', ProductCreateView.as_view(), name='create_product'),
     path('create_version/<int:product_id>/', VersionCreateView.as_view(), name='create_version'),

@@ -8,7 +8,8 @@ from .models import Product, BlogPost, Version
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'image', 'category']
+        fields = ['name', 'description', 'price', 'image', 'category', 'owner']
+        exclude = ('owner',)
         labels = {
             'name': 'Имя',
             'description': 'Описание',
@@ -16,7 +17,7 @@ class ProductForm(forms.ModelForm):
             'image': 'Изображение',
             'category': 'Категория',
         }
-
+        
     def clean_name(self):
         name = self.cleaned_data['name']
         forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
@@ -63,15 +64,15 @@ class VersionForm(forms.ModelForm):
 class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = ('title', 'slug', 'content', 'preview', 'is_published', 'views')
+        fields = ('title', 'content', 'preview', 'is_published', 'views')
         labels = {
             'title': 'Заголовок',
-            'slug': 'Слаг',
             'content': 'Содержимое',
             'preview': 'Изображение',
             'is_published': 'Дата создания',
             'views': 'Количество просмотров'
         }
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.slug = slugify(self.cleaned_data['title'])

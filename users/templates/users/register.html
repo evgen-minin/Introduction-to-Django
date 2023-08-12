@@ -3,7 +3,7 @@
 {% block title %}Форма - {{ block.super }}{% endblock title %}
 
 {% block header %}
-    Вход
+    Форма Регистрации
 {% endblock header %}
 
 {% block content %}
@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     {{ form|crispy }}
 
-                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
                 </form>
             </div>
         </div>

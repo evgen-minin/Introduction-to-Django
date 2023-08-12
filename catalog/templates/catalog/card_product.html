@@ -28,9 +28,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ product.name }}</h5>
                                     <p class="card-text">{{ product.description | slice:":50" }}</p>
+                                    <span class ="text-muted">{{ object.owner|default:"Нет пользователя"}}
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">{{ product.price }}</small>
-                                        <div class="btn-group">
+                                        <div class="btn-group-vertical">
                                             <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-info">Редактировать</a>
                                             <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-danger">Удалить</a>
                                             <a href="{% url 'create_version' product.id %}" class="btn btn-sm btn-primary">Создать новую версию</a>
