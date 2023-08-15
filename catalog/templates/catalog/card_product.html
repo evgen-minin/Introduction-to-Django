@@ -35,6 +35,7 @@
                                             <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-info">Редактировать</a>
                                             <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-danger">Удалить</a>
                                             <a href="{% url 'create_version' product.id %}" class="btn btn-sm btn-primary">Создать новую версию</a>
+                                            <a href="{% url 'product_category' product.id %}" class="btn btn-sm btn-success">Посмотреть категорию</a>
                                         </div>
                                     </div>
                                     {% if product.active_version %}

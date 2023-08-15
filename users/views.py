@@ -1,7 +1,7 @@
 
 import random
 import uuid
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from django.views.generic import UpdateView, CreateView, TemplateView
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
@@ -11,7 +11,10 @@ from users.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth import login
+from django.contrib import messages
+from django.http import HttpResponse
+
+
 class LoginView(BaseLoginView):
     template_name = 'users/login.html'
 
@@ -44,13 +47,13 @@ class RegisterView(CreateView):
 
 class ConfirmView(TemplateView):
     
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if kwargs.get('register_uuid'):
             user = User.objects.filter(register_uuid=kwargs['register_uuid']).first()
             if user: 
                 user.is_active = True
                 user.save()
-                #messages.add_message(request, messages.INFO, f'Учетная запись {user.email} активирована')
+                messages.add_message(request, messages.INFO, f'Учетная запись {user.email} активирована')
         return redirect(reverse('users:login'))
     
     

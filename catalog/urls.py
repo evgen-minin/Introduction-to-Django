@@ -2,10 +2,13 @@ from django.urls import path
 
 from catalog.views import home_controller, contact_controller, ProductListView, ProductCreateView, BlogPostListView, \
     BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView, BlogPostDetailView, ProductDeleteView, \
-    ProductUpdateView, VersionCreateView
+    ProductUpdateView, VersionCreateView, product_category_view
+
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
-    path('', home_controller, name='home'),
+    path('',cache_page(60 * 15) (home_controller), name='home'),
+    path('product/<int:product_id>/category/',product_category_view, name='product_category'),
     path('catalog/', ProductListView.as_view(), name='catalog'),
     path('create/', ProductCreateView.as_view(), name='create_product'),
     path('create_version/<int:product_id>/', VersionCreateView.as_view(), name='create_version'),
